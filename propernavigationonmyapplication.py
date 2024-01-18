@@ -40,7 +40,7 @@ def main(page :flet.Page):
         page.views.clear()
 
         #CHECKING IF DATA ENTERED BY USER MEETS THE REQUIREMENTS OF THE PROGRAM
-        def validate(e:ControlEvent):
+        def validate(e: ControlEvent):
             try:
                 query='select username from login'
                 cursor.execute(query)
@@ -48,10 +48,10 @@ def main(page :flet.Page):
             except :
                 data=[]
 
-            if all([text_username.value,text_password.value]):  
-                for i in range(0,len(data)):   
+            if all([text_username.value,text_password.value]):
+                for i in range(0,len(data)):
                     if text_username.value not in data[i]:                                      
-                        text_username.error_text="User dosnt exit"
+                        text_username.error_text="User doesnt exit"
                         button_submit.disabled = True  
 
                     if text_username.value in data[i]:                                            
@@ -59,7 +59,7 @@ def main(page :flet.Page):
                         button_submit.disabled = False
                         break
                     
-            page.update()
+                page.update()
 
         #WHEN DEF SUBMIT IS CALLED IT CHECKS WITH THE SQL DATABASE IF THE PASSWORD CORRESPONDING TO THE ENTERED USERNAME IS CORRECT AND PUSHES THE USER TO THE HOMEPAGE    
         #OTHERWISE A DIALOGUE BOX IS DISPLAYED   
@@ -91,15 +91,15 @@ def main(page :flet.Page):
 
         #TEXTFIELD ACTIONS
         text_username.on_change = validate
-        text_password.on_change = validate 
+        text_password.on_change = validate
 
         #BUTTON ACTIONS
         button_submit.on_click = submit
 
-        #UI FIELD PLACEMENTS FOR MAIN PAGE
+        #UI FIELD PLACEMENTS FOR LOGIN PAGE
         page.views.append(
             View(
-                route='/',
+                route='/Login',
                 controls=[text_login,
                           appbar,
                           text_username,
@@ -142,7 +142,7 @@ def main(page :flet.Page):
                     insert_para=(username,password)
                     cursor.execute(insert_query % insert_para)
                     db.commit()
-                    page.go('/')
+                    page.go('/Login')
 
             #UI CONTROLEVENT TO CHECK CURRENT CONDITIONS OF GIVEN VALUE
             def validate_reg(e:ControlEvent):
@@ -334,7 +334,7 @@ def main(page :flet.Page):
                     page.update()
                     page.go('/createvault')
                 
-                for i in data:
+                for i in data:                                           
                     if i == (loginn,vault_username,vault_password):
                         global whichvault
                         whichvault=vault_username
@@ -441,7 +441,7 @@ def main(page :flet.Page):
                 min_width=100,
                 min_extended_width=400,
                 height=920,
-                selected_index=0,
+                selected_index=0,   
                 destinations=[
                     flet.NavigationRailDestination(
                         icon=icons.HOME, selected_icon=icons.HOME_FILLED, label="Home"
@@ -751,14 +751,14 @@ def main(page :flet.Page):
 
                         def close_dlg(e):
                             passdisplay.open = False
-                            page.update()
                             page.go('/vault')
+                            page.update()
 
                         def yes(e):
                             pyperclip.copy(password_data[0])
                             passdisplay.open = False
-                            page.update()
                             page.go('/vault')
+                            page.update()
 
                         passdisplay = flet.AlertDialog(
                             modal=True,
@@ -826,8 +826,10 @@ def main(page :flet.Page):
         elif page.route == '/createvault' or '/accessvault' or '/passgen':
             page.go('/homepage')
             
-    #DEFINION CALLS ACTION
+    #FOR BUTTON REROUTES
     page.on_route_change = reroute
+
+    #FOR APPBAR REROUTES
     page.on_view_pop = view_pop
     page.go(page.route)
 
